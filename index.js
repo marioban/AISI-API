@@ -24,9 +24,9 @@ app.get("/", (req, res) => {
 mongoose.connect("mongodb+srv://marioban:marioban@backenddb.msegmcb.mongodb.net/AISI-API?retryWrites=true&w=majority&appName=BackendDB")
 .then(()=>{
     console.log("Connected to the db");
-    app.listen(3000, ()=>{
+    app.listen(3000, '0.0.0.0', () => {
         console.log('Server is running on port 3000');
-    });
+    });    
 })
 .catch(()=> {
     console.log("Connection failed");
