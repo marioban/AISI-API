@@ -31,5 +31,3 @@ mongoose.connect("mongodb+srv://marioban:marioban@backenddb.msegmcb.mongodb.net/
 .catch(()=> {
     console.log("Connection failed");
 });
-
-
