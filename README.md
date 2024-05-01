@@ -1,4 +1,3 @@
-```markdown
 # Node.js API for Product Management
 
 This project implements a Node.js API for managing products with MongoDB as the database, Express.js as the server framework, and ActiveMQ for messaging between components.
