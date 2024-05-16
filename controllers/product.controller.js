@@ -1,5 +1,7 @@
-const Product = require("../models/product.model");
+const Product = require('../models/product.model');
 const { sendMessage } = require("../messaging");
+const safeDeserialize = require('../utils/safeDeserialize');
+const mongoose = require('mongoose');
 
 const getProducts = async (req, res) => {
   try {
@@ -21,8 +23,6 @@ const getProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
 
 const createProduct = async (req, res) => {
   try {
@@ -71,10 +71,37 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const serializeExample = (req, res) => {
+  const product = new Product({
+    _class: "Product",
+    id: "123",
+    name: "Example Product",
+    price: 99.99,
+    quantity: 10
+  });
+
+  // Serialize the product object to JSON
+  const serializedProduct = JSON.stringify(product.toObject());
+
+  // Deserialize the JSON back to an object using safe deserialization
+  let deserializedProduct;
+  try {
+    deserializedProduct = safeDeserialize(serializedProduct);
+  } catch (error) {
+    return res.status(400).json({ message: "Deserialization failed", error: error.message });
+  }
+
+  res.json({
+    serialized: serializedProduct,
+    deserialized: deserializedProduct
+  });
+};
+
 module.exports = {
   getProducts,
   getProduct,
   createProduct,
   updateProduct,
   deleteProduct,
+  serializeExample
 };
