@@ -3,7 +3,7 @@ const stompit = require('stompit');
 const connectOptions = {
   'host': 'localhost',
   'port': 61613,
-  'connectHeaders':{
+  'connectHeaders': {
     'host': '/',
     'login': 'admin',
     'passcode': 'admin',
@@ -26,21 +26,21 @@ stompit.connect(connectOptions, (error, clientConnection) => {
 const sendMessage = (queueName, message) => {
   return new Promise((resolve, reject) => {
     if (!client) {
-      reject("Client is not connected to ActiveMQ.");
+      reject(new Error("Client is not connected to ActiveMQ."));
       return;
     }
-    
+
     const sendHeaders = {
       'destination': `/queue/${queueName}`,
       'content-type': 'text/plain'
     };
-    
+
     const frame = client.send(sendHeaders);
     frame.write(JSON.stringify(message));
     frame.end();
-    
+
     resolve("Message sent to ActiveMQ successfully.");
   });
-}
+};
 
 module.exports = { sendMessage };
