@@ -6,7 +6,7 @@ This project implements a Node.js API for managing products with MongoDB as the 
 ## Branches
 
 - **main**: Contains the basic API with CRUD operations for product management.
-- **secure-coding**: Includes additional features such as JWT authentication, serialization, and updates for scanning with ZAP, Burp Suite, and SonarQube.
+- **secure-coding**: Includes additional features such as JWT authentication, serialization, and updates for scanning with ZAP, and SonarQube.
 
 ## Features
 
