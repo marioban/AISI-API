@@ -6,7 +6,7 @@ const User = require("../models/user.model");
 const router = express.Router();
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2m' });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
 };
 
 const generateRefreshToken = (user) => {
@@ -24,10 +24,10 @@ router.post("/register",
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
 
     try {
-      const user = new User({ username, password });
+      const user = new User({ username, password, role });
       await user.save();
       res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
@@ -50,8 +50,8 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const accessToken = generateAccessToken({ id: user._id, username: user.username });
-    const refreshToken = generateRefreshToken({ id: user._id, username: user.username });
+    const accessToken = generateAccessToken({ id: user._id, username: user.username, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user._id, username: user.username, role: user.role });
 
     refreshTokens.push(refreshToken);
 
@@ -75,7 +75,7 @@ router.post("/token", (req, res) => {
     if (err) {
       return res.sendStatus(403);
     }
-    const accessToken = generateAccessToken({ id: user.id, username: user.username });
+    const accessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
     res.json({ accessToken });
   });
 });
