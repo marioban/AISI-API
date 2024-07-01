@@ -4,22 +4,40 @@ This API provides functionality for user authentication and product management. 
 
 ## Table of Contents
 
-- [Key Components](#key-components)
-- [Endpoints](#endpoints)
-  - [User Authentication](#user-authentication)
-  - [Product Management](#product-management)
-  - [Serialization Example](#serialization-example)
-- [Middleware](#middleware)
-- [Messaging](#messaging)
-- [Using the API with Postman](#using-the-api-with-postman)
-  - [Step 1: Register a User](#step-1-register-a-user)
-  - [Step 2: Login to Get Access and Refresh Tokens](#step-2-login-to-get-access-and-refresh-tokens)
-  - [Step 3: Use Access Token to Access Protected Routes](#step-3-use-access-token-to-access-protected-routes)
-  - [Step 4: Refresh Access Token](#step-4-refresh-access-token)
-  - [Step 5: Logout](#step-5-logout)
-- [Additional Information](#additional-information)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
+- [Product Management API](#product-management-api)
+  - [Table of Contents](#table-of-contents)
+  - [Key Components](#key-components)
+  - [Endpoints](#endpoints)
+    - [User Authentication](#user-authentication)
+      - [Register](#register)
+      - [Login](#login)
+      - [Token](#token)
+      - [Logout](#logout)
+    - [Product Management](#product-management)
+      - [User Endpoints](#user-endpoints)
+        - [Get All Products](#get-all-products)
+        - [Get Product by ID](#get-product-by-id)
+      - [Admin Endpoints](#admin-endpoints)
+        - [Create Product](#create-product)
+        - [Update Product](#update-product)
+        - [Delete Product](#delete-product)
+    - [Serialization Example](#serialization-example)
+  - [Middleware](#middleware)
+  - [Messaging](#messaging)
+  - [Using the API with Postman](#using-the-api-with-postman)
+    - [Step 1: Register a User](#step-1-register-a-user)
+    - [Step 2: Login to Get Access and Refresh Tokens](#step-2-login-to-get-access-and-refresh-tokens)
+    - [Step 3: Use Access Token to Access Protected Routes](#step-3-use-access-token-to-access-protected-routes)
+    - [Step 4: Refresh Access Token](#step-4-refresh-access-token)
+    - [Step 5: Logout](#step-5-logout)
+  - [Admin vs User](#admin-vs-user)
+    - [User Endpoints](#user-endpoints-1)
+    - [Admin Endpoints](#admin-endpoints-1)
+  - [Additional Information](#additional-information)
+  - [Prerequisites](#prerequisites)
+  - [Setup Instructions](#setup-instructions)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Key Components
 
@@ -42,7 +60,8 @@ This API provides functionality for user authentication and product management. 
   ```json
   {
     "username": "user1",
-    "password": "password123"
+    "password": "password123",
+    "role": "user" // or "admin"
   }
   ```
 - **Response**:
@@ -105,7 +124,11 @@ This API provides functionality for user authentication and product management. 
 
 ### Product Management
 
-#### Get All Products
+#### User Endpoints
+
+These endpoints are accessible by both admin and regular users.
+
+##### Get All Products
 
 - **URL**: `/api/products`
 - **Method**: GET
@@ -126,7 +149,7 @@ This API provides functionality for user authentication and product management. 
   ]
   ```
 
-#### Get Product by ID
+##### Get Product by ID
 
 - **URL**: `/api/products/:id`
 - **Method**: GET
@@ -144,11 +167,15 @@ This API provides functionality for user authentication and product management. 
   }
   ```
 
-#### Create Product
+#### Admin Endpoints
+
+These endpoints are accessible only by admin users.
+
+##### Create Product
 
 - **URL**: `/api/products`
 - **Method**: POST
-- **Protected**: Yes (requires authentication)
+- **Protected**: Yes (requires authentication and admin role)
 - **Description**: Creates a new product.
 - **Request Body**:
   ```json
@@ -170,11 +197,11 @@ This API provides functionality for user authentication and product management. 
   }
   ```
 
-#### Update Product
+##### Update Product
 
 - **URL**: `/api/products/:id`
 - **Method**: PUT
-- **Protected**: Yes (requires authentication)
+- **Protected**: Yes (requires authentication and admin role)
 - **Description**: Updates an existing product.
 - **Request Body**: Partial or complete update data.
   ```json
@@ -196,11 +223,11 @@ This API provides functionality for user authentication and product management. 
   }
   ```
 
-#### Delete Product
+##### Delete Product
 
 - **URL**: `/api/products/:id`
 - **Method**: DELETE
-- **Protected**: Yes (requires authentication)
+- **Protected**: Yes (requires authentication and admin role)
 - **Description**: Deletes a product by its ID.
 - **Response**:
   ```json
@@ -253,7 +280,8 @@ This API provides functionality for user authentication and product management. 
    ```json
    {
      "username": "user1",
-     "password": "password123"
+     "password": "password123",
+     "role": "user" // or "admin"
    }
    ```
 4. **Send Request**: Click Send.
@@ -323,6 +351,23 @@ This API provides functionality for user authentication and product management. 
    ```
 4. **Send Request**: Click Send.
 
+## Admin vs User
+
+### User Endpoints
+
+- **GET `/api/products`**: Retrieve all products.
+- **GET `/api/products/:id`**: Retrieve a specific product by its ID.
+
+### Admin Endpoints
+
+- **GET `/api/products`**: Retrieve all products.
+- **GET `/api/products/:id`**: Retrieve a specific product by its ID.
+- **POST `/api/products`**: Create a new product.
+- **PUT `/api/products/:id`**: Update an existing product.
+- **DELETE `/api/products/:id`**: Delete a product by its ID.
+
+The role assigned to a user during registration determines their level of access within the API. Admin users have full CRUD (Create, Read, Update, Delete) access to the products, while regular users have read-only access.
+
 ## Additional Information
 
 - **Database**: MongoDB
@@ -346,10 +391,22 @@ This API provides functionality for user authentication and product management. 
    - `ACCESS_TOKEN_SECRET`
    - `REFRESH_TOKEN_SECRET`
    - `MONGODB_URI`
-4. Start the server: `node index.js`.
+   - `ALLOWED_ORIGINS`
+4. Start the server: `node app.js`.
 5. Use Postman to test the endpoints as described above.
 
-This detailed guide should help you understand and interact with the API effectively using Postman. If you have any questions or need further assistance, feel free to ask!
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request.
+
+## License
+
+This project is licensed under the MIT License.
 ```
 
-Copy and paste the above text into a `README.md` file in your GitHub repository. This will provide a comprehensive guide for users to understand and interact with your API.
+This README file now includes clear distinctions between the endpoints accessible by users and those accessible by admins, detailing the permissions for each role. It also provides step-by-step instructions for using the API with Postman, as well as setup instructions and other relevant information for developers.
