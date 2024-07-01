@@ -79,15 +79,16 @@ const deleteProduct = async (req, res) => {
 
 const serializeExample = (req, res) => {
   const product = new Product({
-    _class: "Product",
-    id: "123",
     name: "Example Product",
     price: 99.99,
     quantity: 10
   });
 
   // Serialize the product object to JSON
-  const serializedProduct = JSON.stringify(product.toObject());
+  const serializedProduct = JSON.stringify({
+    ...product.toObject(),
+    _class: "Product"
+  });
 
   // Deserialize the JSON back to an object using safe deserialization
   let deserializedProduct;
