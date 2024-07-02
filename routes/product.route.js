@@ -1,14 +1,18 @@
 const express = require("express");
-const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, serializeExample } = require('../controllers/product.controller.js');
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, serializeExample } = require('../controllers/product.controller');
+const { authenticateToken, authorizeRole } = require('../middleware/auth.middleware');
 const router = express.Router();
 
-router.get('/', getProducts);
-router.get("/:id", getProduct);
-router.post("/", createProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+// Public routes
+router.get('/', authenticateToken, getProducts);
+router.get("/:id", authenticateToken, getProduct);
 
-// Define the serialization example route
+// Admin-only routes
+router.post("/", authenticateToken, authorizeRole(['admin']), createProduct);
+router.put("/:id", authenticateToken, authorizeRole(['admin']), updateProduct);
+router.delete("/:id", authenticateToken, authorizeRole(['admin']), deleteProduct);
+
+// Additional routes
 router.get("/serialize/example", serializeExample);
 
 module.exports = router;
